@@ -21,22 +21,7 @@
 
 mkdir . . .
 
-#set new director as working directory
-setwd("~/Documents/Core /TELUS/security intelligence")
-
-#install all the packages prerequisites.  First check to see if they exist.  If 
-#they do not then install them
-
-pkg <- c("devtools", "ggplot2", "scales", "rjson",
-         "sp", "maps", "grid", "car", "bitops","mapproj",
-         "stringer", "maps", "grid", "gridExtra", "RColorBrewer",
-         "igraph", "colorspace","reshape2", "plyr", "maptools", "ggmap")
-
-new.pkg <- pkg[!(pkg %in% installed.packages())]
-if(length(new.pkg)){
-  install.packages(new.pkg)
-}
-
+install.packages()
 #install the package for VCDB
 ##install verisr
 install_github("verisr","jayjaobs")

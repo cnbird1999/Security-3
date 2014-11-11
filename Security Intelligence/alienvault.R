@@ -4,7 +4,7 @@ library(ggplot2)
 #End of libraries
 
 ##set global/environmental variables
-setwd("~/Documents/Core /TELUS/security intelligence")
+setwd("~/projects/testing/Security Intelligence")
 
 #End of environmental variables
 
@@ -27,14 +27,46 @@ colnames(av) <-c("IP", "Reliability", "Risk", "Type", "Country",
 
 #Run sme very exploratory analysis of the data to validate 
 str(av)
-head(av)
+head(av,n=100)
 summary(av$Reliability)
 summary(av$Risk)
 
 #Subset the data for a particular region 
-us <- subset(av, Country == "CA" & Locale == "Vancouver")
-head(us)
+#us <- subset(av, Country == "CA" && Locale == "Vancouver")
+#head(us)
 
+
+
+#extract coords
+# Listing 4-3
+# R code to extract longitude/latitude pairs from AlienVault data
+# read in the AlienVault reputation data
+avRep <- "data/reputation.data"
+av.df <- read.csv(avRep, sep="#", header=FALSE)
+colnames(av.df) <- c("IP", "Reliability", "Risk", "Type",
+                     "Country", "Locale", "Coords", "x")
+
+# create a vector of lat/long data by splitting on ","
+av.coords.vec <- unlist(strsplit(as.character(av.df$Coords), ","))
+# convert the vector in a 2-column matrix
+av.coords.mat <- matrix(av.coords.vec, ncol=2, byrow=TRUE)
+# project into a data frame
+av.coords.df <- as.data.frame(av.coords.mat)
+# name the columns 
+colnames(av.coords.df) <- c("lat","long")
+# convert the characters to numeric values
+av.coords.df$long <- as.double(as.character(av.coords.df$long))
+av.coords.df$lat <- as.double(as.character(av.coords.df$lat))
+
+
+head(av.coords.df)
+
+head(av)
+final<- cbind(av, av.coords.df)
+final$Coords<-NULL
+head(final)
+
+##### end of cords extraction 
 
 summary(av$Country, maxsum=40)
 
@@ -43,11 +75,14 @@ summary(av$Country, maxsum=40)
 #get the top 20 country names
 country.top20 <- (names(summary(av$Country))[1:20])
 
+head(country.top20)
+
 #subset the data and plot
 gg <- ggplot(data=subset(av,Country %in% country.top20), 
              aes(x=reorder(Country, Country, length)))
 gg <- gg + geom_bar(fill="#000099")
 
+print(gg)
 
 #cleanup the gg labels
 gg <- gg + labs(title="Country Counts",

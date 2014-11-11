@@ -1,7 +1,7 @@
 ##set environment variables and check to see if necessary pakckages are installed 
 ##if not, then install them
 
-setwd("~/Documents/Core /TELUS/security intelligence")
+setwd("~/projects/testing/Security Intelligence")
 pkg <- c("devtools", "ggplot2", "scales", "rjson",
          "sp", "maps", "grid", "car")
 new.pkg <- pkg[!(pkg %in% installed.packages())]
@@ -14,17 +14,19 @@ install_github("verisr","jayjaobs")
 
 
 ## load JSON library
-library(json)
+library(rjson)
 jsonfile"/data/vcdb/latest.json"
 incident <-fromJSON(file=jsonfile)
 print(incident$action$hacking$variety)
  
 ##load up devtools
+setwd("~/projects/testing/Security Intelligence")
+library(rjson)
 library(devtools)
 library(verisr)
 
 #set were vcdb instances are stored
-jsondir <-'data/vcdb/'
+jsondir <-'data/VERIS/json'
 
 #create a veris instance with the vcdb data
 vcdb <-json2veris(jsondir)
